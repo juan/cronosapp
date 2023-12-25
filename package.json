@@ -1,0 +1,37 @@
+{
+    "name": "yeti-laravel",
+    "version": "3.3.0",
+    "author": "yetithemes",
+    "private": true,
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build"
+    },
+    "dependencies": {
+        "@ckeditor/ckeditor5-build-classic": "^35.1.0",
+        "@glidejs/glide": "^3.5.2",
+        "animate.css": "^4.1.1",
+        "chart.js": "^3.9.1",
+        "fullcalendar": "^6.1.9",
+        "line-awesome": "^1.3.0",
+        "moment": "^2.29.4",
+        "pikaday": "^1.8.2",
+        "sortablejs": "^1.15.0",
+        "sweetalert2": "^11.6.13",
+        "tippy.js": "^6.3.7"
+    },
+    "devDependencies": {
+        "@tailwindcss/aspect-ratio": "^0.4.2",
+        "alpinejs": "^3.4.2",
+        "autoprefixer": "^10.4.2",
+        "axios": "^0.27",
+        "laravel-vite-plugin": "^0.6.0",
+        "lodash": "^4.17.19",
+        "postcss": "^8.4.6",
+        "postcss-custom-properties": "^12.1.8",
+        "postcss-import": "^15.0.0",
+        "rollup-plugin-copy-merge": "^0.3.5",
+        "tailwindcss": "^3.1.0",
+        "vite": "^3.0.0"
+    }
+}
