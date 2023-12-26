@@ -2,9 +2,7 @@
 
 ## Information
 
-Hello my name is Juan Pablo Moreno, I'm from Venezuela and treating to build a medical software web page using Laravel,
-for me I will love to, people is this community can help to understand the best practics to code in Laravel. My idea in
-this software is:
+Hello my name is Juan Pablo Moreno, I'm from Venezuela and treating to build a medical software web page using Laravel, for me I will love to find people is this community that can help to understand the best practics to code in Laravel. My idea in this software is:
 
 - Create doctors.
 - Create pactients
