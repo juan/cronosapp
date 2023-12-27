@@ -13,8 +13,8 @@ class UserSeeder extends Seeder
         $userinfo->state_id = 1;
         $userinfo->identity_id = 1;
         $userinfo->gender_id = 3;
-        $userinfo->dni = '95933899';
-        $userinfo->phone = '2995529100';
+        $userinfo->dni = '123456789';
+        $userinfo->phone = '5492995529100';
         $userinfo->name = 'Juan Pablo';
         $userinfo->lastname = 'Moreno Gonzalez';
         $userinfo->email = 'admin@admin.com';
