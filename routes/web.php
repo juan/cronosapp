@@ -49,7 +49,8 @@ Route::group(['middleware' => 'auth', 'verified'], function () {
         ->name('conf_actions');
     Route::get('/conf_menus', App\Http\Livewire\Config\ConfMenus::class)
         ->name('conf_menus');
-
+    Route::get('/conf_roles', App\Http\Livewire\Config\ConfRoles::class)
+        ->name('conf_roles');
 });
 
 // UI

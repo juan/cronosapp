@@ -18,6 +18,11 @@ class InsurancePatient extends Model
             'insurance_plan_id',
         ];
 
+    public static function getModelAttributes(): array
+    {
+        return self::getModel()->getFillable();
+    }
+
     public function patient()
     {
         return $this->belongsTo(Patient::class);

@@ -14,8 +14,9 @@ trait TableSorting
 
     public $indxorder = 'asc';
 
-    public function orderColum($ordercolum)
+    public function orderColum($ordercolum, $columname)
     {
+
         if ($this->indxorder == 'asc') {
             $this->indxorder = 'desc';
         } else {
@@ -23,6 +24,13 @@ trait TableSorting
         }
 
         $this->columsort = $ordercolum;
+        $this->setSortingOrder($columname);
+    }
+
+    public function setSortingOrder($strinorder)
+    {
+
+        $this->selectsor = $strinorder;
     }
 
     public function scopeDataOrder(

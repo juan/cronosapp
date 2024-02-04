@@ -40,7 +40,14 @@ trait RecordsActivity
 
     protected function createdLog($event)
     {
+        if (auth()->id() !== null) {
+            $userid = auth()->id();
+        } else {
+            $userid = $this->id;
+        }
+
         $classname = $this->nameclass($this);
+
         if ($this->formName() == 'login' or $this->formName() == 'logout') {
             $themessage = 'ha';
             $queryid = $this->formName() == 'login' ? 4 : 5;
@@ -52,7 +59,7 @@ trait RecordsActivity
         }
 
         Log::create([
-            'user_id' => auth()->id(),
+            'user_id' => $userid,
             'query_id' => $queryid,
             'modelclass_type' => get_class($this),
             'modelclass_id' => $this->id,

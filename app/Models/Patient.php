@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use App\Events\Patient\NewEmailPatient;
 use App\Traits\RecordsActivity;
 use App\Traits\TableSorting;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -43,13 +43,9 @@ class Patient extends Model
         ];
     }
 
-    protected static function booted()
+    public static function getModelAttributes(): array
     {
-        static::created(function ($patient) {
-            if (! empty($patient->email_patient)) {
-                event(new NewEmailPatient($patient));
-            }
-        });
+        return self::getModel()->getFillable();
     }
 
     public function gender(): BelongsTo
@@ -100,8 +96,9 @@ class Patient extends Model
     {
         return Attribute::make(
             get: fn ($value) => is_null($value) ? ''
-                : date('d-m-Y', strtotime($value)),
-            set: fn ($value) => str()->squish($value),
+                : date('d/m/Y', strtotime($value)),
+            set: fn ($value) => Carbon::createFromFormat('d/m/Y', $value)
+                ->format('Y-m-d'),
         );
     }
 

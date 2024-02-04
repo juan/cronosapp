@@ -10,12 +10,6 @@
 
         <nav class="flex items-center ltr:ml-auto rtl:mr-auto">
 
-            <!-- Dark Mode -->
-            <label class="switch switch_outlined" data-toggle="tooltip" data-tippy-content="Toggle Dark Mode">
-                <input id="darkModeToggler" type="checkbox">
-                <span></span>
-            </label>
-
             <!-- Fullscreen -->
             <button id="fullScreenToggler"
                     class="hidden lg:inline-block ltr:ml-5 rtl:mr-5 text-2xl leading-none la la-expand-arrows-alt"
@@ -61,83 +55,19 @@
                 </div>
 
                 <!-- Botones -->
-                <div class="flex items-center">
-                    <a href="{{ url('pages/auth/forgot-password') }}" class="text-sm uppercase">Olvido contraseña?</a>
-                    <x-primary-button class="ml-3">
-                        {{ __('Log in') }}
-                    </x-primary-button>
+                <div class="flex items-center justify-between">
+                    <div class="w-1/2">
+                        <a href="{{ route('password.request') }}" class="text-sm uppercase">Olvido contraseña?</a>
+                    </div>
+                    <div class="w-16">
+                        <button class="btn_primary p-2 rounded text-white shadow-success py-2 hover:bg-none hover:text-white">
+                            Ingreso
+                        </button>
+                    </div>
+
                 </div>
 
-                <!-- Remember Me
-            <div class="block mt-4">
-                <label for="remember_me" class="inline-flex items-center">
-                    <input id="remember_me" type="checkbox"
-                           class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
-                    <span class="ml-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-                </label>
-            </div>
 
-            <div class="flex items-center justify-end mt-4">
-                @if (Route::has('password.request'))
-                    <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                       href="{{ route('password.request') }}">
-                        {{ __('Forgot your password?') }}
-                    </a>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                @endif
-
-                <x-primary-button class="ml-3">
-                    {{ __('Log in') }}
-                </x-primary-button>
-            </div>
-            -->
             </form>
         </div>
     </div>

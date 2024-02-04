@@ -3,8 +3,6 @@
 namespace Tests\Feature\Livewire\Config;
 
 use App\Http\Livewire\Config\Roles;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Livewire\Livewire;
 use Tests\TestCase;
 

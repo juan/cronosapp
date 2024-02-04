@@ -7,6 +7,7 @@ use App\Models\Skill;
 use App\Models\Specialtie;
 use App\Models\State;
 use App\Models\Type;
+use App\Models\User;
 use Livewire\Component;
 
 class RegMedico extends Component
@@ -15,6 +16,8 @@ class RegMedico extends Component
 
     public $isdisabled;
 
+    public $lismedicos = [];
+
     public $datadoctor
         = [
             'skill_id' => '',
@@ -22,14 +25,20 @@ class RegMedico extends Component
             'type_id' => 1,
             'state_id' => 1,
             'num_matricula' => '',
-            'interno_doc' => '',
-            'name' => '',
-            'lastname' => '',
-            'phone' => '',
-            'email' => '',
+
+        ];
+
+    public $datauser
+        = [
+            'name_doc' => '',
+            'lastname_doc' => '',
+            'phone_doc' => '',
+            'email_doc' => '',
         ];
 
     public $doctorobjet;
+
+    public $useobjet;
 
     protected $listeners = ['loadDoctorInfo'];
 
@@ -62,19 +71,20 @@ class RegMedico extends Component
 
     public function doctorCreate(array $arrayDoctor)
     {
-        $doctor = $this->doctorrecord->doctorCreate($arrayDoctor);
+        $doctor = $this->doctorrecord->doctorCreate($arrayDoctor,
+            $this->useobjet);
         $this->emit(get_function_name(__FUNCTION__),
             $doctor->wasRecentlyCreated);
     }
 
     public function doctorUpdate(array $arrayDoctor)
     {
-        $doctorUpdate = $this->doctorrecord->doctorUpdate($arrayDoctor,
-            $this->doctorobjet);
+
     }
 
     public function listDoctor()
     {
+
         $this->emit('openModal', ['moduloname' => 'principal.list-doctor']);
     }
 
@@ -98,5 +108,32 @@ class RegMedico extends Component
         $this->reset();
         $this->resetValidation();
         $this->resetErrorBag();
+    }
+
+    public function findRoleMedic()
+    {
+        if (strlen($this->datauser['name_doc']) >= 2) {
+            return $this->lismedicos = User::userbyRole(5,
+                $this->datauser['name_doc'])
+                ->get();
+
+        } else {
+            return $this->lismedicos = [];
+        }
+    }
+
+    public function loadTempInfo(User $idUser)
+    {
+        $this->datauser['name_doc'] = $idUser->name;
+        $this->datauser['lastname_doc'] = $idUser->lastname;
+        $this->datauser['phone_doc'] = $idUser->phone;
+        $this->datauser['email_doc'] = $idUser->email;
+        $this->useobjet = $idUser;
+    }
+
+    public function limpiarListMedico()
+    {
+        $this->lismedicos = [];
+        $this->datauser['name_doc'] = '';
     }
 }

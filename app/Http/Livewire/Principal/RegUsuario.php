@@ -7,10 +7,20 @@ use App\Models\Gender;
 use App\Models\Identity;
 use App\Models\Role;
 use App\Models\State;
+use App\Models\User;
+use App\Traits\UploadFileTrait;
 use Livewire\Component;
 
 class RegUsuario extends Component
 {
+    use UploadFileTrait;
+
+    public $useraction;
+
+    public $userobject;
+
+    public $isdisabled;
+
     public $datauser
         = [
             'role_id' => '',
@@ -28,7 +38,14 @@ class RegUsuario extends Component
             'profile_photo_path' => '',
         ];
 
-    protected UserRecord $userRecord;
+    protected $listeners = ['showUserInfo'];
+
+    private UserRecord $userRecord;
+
+    public function boot(UserRecord $userRecord)
+    {
+        $this->userRecord = $userRecord;
+    }
 
     public function render()
     {
@@ -42,13 +59,77 @@ class RegUsuario extends Component
             ->section('workspace');
     }
 
-    public function boot(UserRecord $userRecord)
-    {
-        $this->userRecord = $userRecord;
-    }
-
     public function getUsuario()
     {
-        $this->userRecord->userCreate($this->datauser);
+        empty($this->useraction) ? $this->userCreate() : $this->userUpdate();
+
+    }
+
+    public function userCreate()
+    {
+
+        $newuser = $this->userRecord->userCreate($this->datauser);
+
+        $this->emit(get_function_name(__FUNCTION__),
+            $newuser->wasRecentlyCreated);
+
+        $this->cleanForm();
+    }
+
+    public function cleanForm()
+    {
+        $this->reset();
+        $this->resetValidation();
+        $this->resetErrorBag();
+    }
+
+    public function userUpdate()
+    {
+        $edituser = $this->userRecord->userUpdate($this->userobject,
+            $this->datauser);
+
+        $this->emit(get_function_name(__FUNCTION__),
+            $edituser->getChanges());
+
+        $this->datauser = $this->userobject->refresh()->toArray();
+
+    }
+
+    public function updatedDatauserprofilephotopath()
+    {
+        $this->validate([
+            'datauser.profile_photo_path' => 'sometimes|nullable|image|mimes:jpg,png,jpeg,svg|max:1500',
+        ]);
+
+    }
+
+    public function listUser()
+    {
+        $this->emit('openModal', ['moduloname' => 'principal.list-usuario']);
+    }
+
+    public function showUserInfo($iduser, $acion)
+    {
+        if ($acion == 'view') {
+            $this->isdisabled = 'disabled';
+        } else {
+            $this->isdisabled = '';
+            $this->useraction = 'update';
+        }
+        $this->loadUserInfo($iduser);
+    }
+
+    public function loadUserInfo($iduser)
+    {
+        $this->namefoto = null;
+
+        $this->userobject = User::find($iduser);
+
+        $this->datauser = $this->userobject->toArray();
+
+        $this->namefoto = ! empty($this->datauser['profile_photo_path'])
+            ? $this->datauser['profile_photo_path'] : null;
+
+        $this->reloadPhoto();
     }
 }

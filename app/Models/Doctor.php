@@ -12,18 +12,19 @@ class Doctor extends Model
 
     protected $fillable
         = [
+
             'skill_id',
             'specialtie_id',
             'type_id',
             'state_id',
             'num_matricula',
-            'interno_doc',
 
         ];
 
-    protected string $columSortName = 'name_doc';
-
-    protected $casts = ['interno_doc' => 'boolean'];
+    public static function getModelAttributes(): array
+    {
+        return self::getModel()->getFillable();
+    }
 
     public static function arraycolumSor()
     {
@@ -32,12 +33,8 @@ class Doctor extends Model
             'lastname_doc' => 'Apellido',
             'skill_id' => 'Mención',
             'specialtie_id' => 'Especialidad',
+            'num_matricula' => 'Matrícula',
         ];
-    }
-
-    public function user()
-    {
-        return $this->morphOne(User::class, 'usertype');
     }
 
     public function scopeDoctorInfo($query, $idDoctor)
@@ -63,6 +60,11 @@ class Doctor extends Model
     public function state(): BelongsTo
     {
         return $this->belongsTo(State::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function scopeSearchTerm(

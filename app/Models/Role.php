@@ -6,13 +6,14 @@ use App\Traits\TableSorting;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Role extends Model
 {
     use HasFactory, TableSorting;
 
-    protected $fillable = ['name_role'];
+    protected $fillable = ['name_role', 'state_id'];
 
     protected string $columSortName = 'name_role';
 
@@ -51,9 +52,10 @@ class Role extends Model
             $ownerarray
         ) {
             if (is_null($arrayroles)) {
-                $query->where('id', '>=', $isowner);
+                $query->where('id', '>=', $isowner)->where('state_id', 1);
             } else {
-                $query->whereIn('id', array_merge($arrayroles, $ownerarray));
+                $query->whereIn('id', array_merge($arrayroles, $ownerarray))
+                    ->where('state_id', 1);
             }
         })->orderBy('name_role');
     }
@@ -66,6 +68,23 @@ class Role extends Model
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class);
+    }
+
+    public function state(): BelongsTo
+    {
+        return $this->belongsTo(State::class);
+    }
+
+    public function scopeTableQuery($query)
+    {
+        if (@auth()->user()->isOwner()) {
+            $isowner = 1;
+        } else {
+            $isowner = 2;
+        }
+
+        return $query->where('id', '>=', $isowner)
+            ->with(['state']);
     }
 
     /**Accessors & Mutators Attributes**/

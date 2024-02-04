@@ -3,8 +3,8 @@
 namespace App\Listeners\Registro;
 
 use App\Events\Registro\NewUserMail;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
+use App\Mail\Registro\NewUser;
+use Mail;
 
 class SendNewUserEmail
 {
@@ -21,11 +21,12 @@ class SendNewUserEmail
     /**
      * Handle the event.
      *
-     * @param  \App\Events\Registro\NewUserMail  $event
      * @return void
      */
     public function handle(NewUserMail $event)
     {
-        //
+        Mail::to($event->user->email)->send(
+            new NewUser($event)
+        );
     }
 }

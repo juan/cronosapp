@@ -3,6 +3,9 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Traits\RecordsActivity;
+use App\Traits\TableSorting;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -14,7 +17,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, RecordsActivity, TableSorting;
 
     /**
      * @var int|mixed
@@ -46,6 +49,8 @@ class User extends Authenticatable
             'profile_photo_path',
         ];
 
+    protected string $columSortName = 'dni';
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -68,12 +73,27 @@ class User extends Authenticatable
             'datebirth' => 'date',
         ];
 
-    /**All relations for User**/
-
-    public function menus(): BelongsToMany
+    public static function arraycolumSor(): array
     {
-        return $this->belongsToMany(Menu::class)->orderBy('numcolum', 'asc');
+        return [
+            'dni' => 'DNI',
+            'name' => 'Nombre',
+            'lastname' => 'Apellido',
+            'phone' => 'Teléfono',
+        ];
     }
+
+    public static function getModelAttributes(): array
+    {
+        return self::getModel()->getFillable();
+    }
+
+    public function doctor()
+    {
+        return $this->hasOne(Doctor::class);
+    }
+
+    /**All relations for User**/
 
     public function logs(): HasMany
     {
@@ -99,9 +119,10 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class);
     }
 
-    public function usertype()
+    public function scopeTableQuery($query)
     {
-        return $this->morphTo();
+        $query->where('id', '>', 1)->orderBy('name')
+            ->orderBy('state_id', 'asc');
     }
 
     public function isOwner()
@@ -115,6 +136,15 @@ class User extends Authenticatable
             ->first();
 
         return $owner->roles_count;
+    }
+
+    public function scopeUserbyRole($query, $roleid = null, $string = null)
+    {
+        return $query
+            ->where('role_id', $roleid)
+            ->where('name', 'like',
+                '%'.str()->upper($string).'%')
+            ->doesntHave('doctor');
     }
 
     protected function password(): Attribute
@@ -152,6 +182,17 @@ class User extends Authenticatable
     {
         return Attribute::make(
             set: fn ($value) => str()->squish($value),
+        );
+    }
+
+    protected function datebirth(): Attribute
+    {
+
+        return Attribute::make(
+            get: fn ($value) => is_null($value) ? ''
+                : date('d/m/Y', strtotime($value)),
+            set: fn ($value) => Carbon::createFromFormat('d/m/Y', $value)
+                ->format('Y-m-d'),
         );
     }
 }

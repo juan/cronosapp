@@ -2,28 +2,13 @@
 
 namespace App\Classes\Registro\Principal;
 
+use App\Events\Patient\NewEmailPatient;
 use App\Models\InsurancePatient;
 use App\Models\Patient;
 use Illuminate\Support\Arr;
 
 class PacienteRecord
 {
-    public $originalPaciente
-        = [
-            'identity_id', 'gender_id',
-            'name_patient', 'lastname_patient',
-            'numberid_patient', 'datebirth',
-            'cellphone', 'email_patient',
-            'direccion_patient', 'cuil_patient',
-        ];
-
-    public $originalInsuracesPatien
-        = [
-            'insurance_id',
-            'insurance_plan_id',
-            'numafiliado',
-        ];
-
     public function __construct(
         private PacienteValidation $pacienteValidation
     ) {
@@ -43,12 +28,15 @@ class PacienteRecord
 
         $this->pacienteValidation->ValidateCreatePatient($arraypatient);
 
-        $pacien = Patient::create(prepareData($arraypatient,
-            $this->originalPaciente));
+        $newPatient = Patient::create($arraypatient);
 
-        $pacien->insurance_patient()->createMany($insurancplans);
+        $newPatient->insurance_patient()->createMany($insurancplans);
 
-        return $pacien;
+        if (! empty($arraypatient['email_patient'])) {
+            event(new NewEmailPatient($newPatient));
+        }
+
+        return $newPatient;
     }
 
     public function pacienUpdate($patienObj, $newdataPatien, $insuracetables)
@@ -57,7 +45,7 @@ class PacienteRecord
         $this->pacienteValidation->ValidateUpdatePatient($newdataPatien);
 
         $patienObj->update(prepareData($newdataPatien,
-            $this->originalPaciente));
+            Patient::getModelAttributes()));
 
         foreach ($insuracetables as $key => $datainsuratable) {
 
@@ -66,7 +54,7 @@ class PacienteRecord
                 : $datainsuratable['insurance_plan_id'];
 
             $arrayforUpdate = prepareData($datainsuratable,
-                $this->originalInsuracesPatien);
+                InsurancePatient::getModelAttributes());
 
             $uniquesvalues = array_merge([
                 'patient_id' => $patienObj->id,
@@ -100,7 +88,7 @@ class PacienteRecord
             = InsurancePatient::find($idInsuraPatient);
 
         $patientInsurance->update(prepareData($arrayInusraceData,
-            $this->originalInsuracesPatien));
+            InsurancePatient::getModelAttributes()));
 
         return $patientInsurance;
     }

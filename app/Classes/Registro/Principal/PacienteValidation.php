@@ -2,6 +2,7 @@
 
 namespace App\Classes\Registro\Principal;
 
+use App\Rules\ValidDate;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -28,7 +29,10 @@ class PacienteValidation
                     }),
                 ],
                 'cellphone' => 'required|min_digits:5|regex:/^([^<>]*)$/',
-                'datebirth' => 'required|date_format:d/m/Y|regex:/^([^<>]*)$/',
+                'datebirth' => [
+                    'required', 'date_format:d/m/Y', 'regex:/^([^<>]*)$/',
+                    new ValidDate('d/m/Y', $arraypatient['datebirth']),
+                ],
                 'direccion_patient' => 'sometimes|min:5|regex:/^([^<>]*)$/',
                 'cuil_patient' => [
                     'sometimes', 'min:5', 'regex:/^([^<>]*)$/',
@@ -83,7 +87,10 @@ class PacienteValidation
                     }),
                 ],
                 'cellphone' => 'required|min_digits:5|regex:/^([^<>]*)$/',
-                'datebirth' => 'required|date_format:d/m/Y|regex:/^([^<>]*)$/',
+                'datebirth' => [
+                    'required', 'date_format:d/m/Y', 'regex:/^([^<>]*)$/',
+                    new ValidDate('d/m/Y', $arraypatient['datebirth']),
+                ],
                 'direccion_patient' => 'sometimes|min:5|regex:/^([^<>]*)$/',
                 'cuil_patient' => [
                     'sometimes', 'min:5', 'regex:/^([^<>]*)$/',

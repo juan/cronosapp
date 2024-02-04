@@ -19,7 +19,6 @@ return new class extends Migration
             $table->foreignId('state_id')->nullable()->constrained();
             $table->foreignId('identity_id')->nullable()->constrained();
             $table->foreignId('gender_id')->nullable()->constrained();
-            $table->nullableMorphs('usertype');
             $table->string('name');
             $table->string('lastname')->nullable();
             $table->string('email')->unique()->nullable();

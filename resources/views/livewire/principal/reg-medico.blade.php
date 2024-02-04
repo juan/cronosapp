@@ -13,7 +13,7 @@
             <x-opcionsbladeform namefunction="listDoctor"></x-opcionsbladeform>
             <div class="relative">
                 <div
-                        wire:click.prevent=""
+                        wire:click.prevent="listDoctor"
                         wire:target="listDoctor"
                         class="p-2 w-12 h-12 absolute right-0 -top-20 flex items-center
                         justify-center bg-fondotabla shadow-lg rounded-lg
@@ -33,7 +33,7 @@
                 <div class="flex sm:col-span-4 gap-x-1">
                     <div class="relative  sm:col-span-1 w-36">
                         <x-input_select_form
-                                label="Mención" idbox="docmencion"
+                                label="Profesión" idbox="docmencion"
                                 wireid="datadoctor.skill_id" autofocus isdisabled="{{$isdisabled}}"
                         >
                             <option disabled selected value></option>
@@ -42,20 +42,70 @@
                             @endforeach
                         </x-input_select_form>
                     </div>
+                    @php
+                        if(count($lismedicos)>=1){
+                            $open='true';
 
-                    <div class="relative w-full">
+                        }else{
+
+                            $open='false';
+
+                        }
+                    @endphp
+                    <div class="relative w-full"
+                         x-data="{
+                                       open:{{$open}},
+                                       cerrar(){
+                                          this.open = false
+
+
+                                       },
+                                       abrir(){
+                                         this.open = true
+                                       },
+                                       close(){
+                                        $wire.limpiarListMedico()
+                                       }
+                                    }"
+                         @keydown.escape.prevent.stop="close()"
+                      
+                    >
                         <x-boxtextinput label="Nombre" idbox="docname"
-                                        wireid="datadoctor.name"
+                                        wire:keyup="findRoleMedic"
+                                        wireid="datauser.name_doc"
                                         maxlength="15" isrequired="yes"
                                         maxlength="42" isdisabled="{{$isdisabled}}"
                         >
                         </x-boxtextinput>
+                        @if(count($lismedicos)>=1)
+
+                            <ul
+                                    x-show="open"
+                                    class="absolute z-10 mt-1 max-h-40 w-full overflow-auto rounded-md
+                                bg-gray-100 py-0 text-base shadow-lg ring-1
+                                   ring-info focus:outline-none sm:text-sm "
+                                    id="options" role="listbox">
+                                @foreach($lismedicos as $datuser)
+                                    <li class="relative cursor-default select-none py-1 pl-3 pr-9 text-gray-900 hover:bg-gray-200"
+                                        id="option-{{$loop->iteration}}"
+                                        role="option" tabindex="-1">
+                                        <span class="block truncate"
+                                              @click="cerrar()"
+                                              wire:click="loadTempInfo('{{$datuser->id}}')">
+                                            {{"$datuser->name $datuser->lastname"}}
+                                        </span>
+                                    </li>
+                                @endforeach
+
+                            </ul>
+
+                        @endif
                     </div>
                 </div>
                 <div class="relative sm:col-span-2">
 
                     <x-boxtextinput label="Apellido" idbox="doclastna"
-                                    wireid="datadoctor.lastname"
+                                    wireid="datauser.lastname_doc"
                                     maxlength="42" isrequired="yes" isdisabled="{{$isdisabled}}"
                     >
                     </x-boxtextinput>
@@ -100,7 +150,7 @@
                 <div class="flex sm:col-span-4 gap-x-1">
                     <div class="relative  w-full">
                         <x-boxtextinput label="Correo" idbox="doccorreo"
-                                        wireid="datadoctor.email"
+                                        wireid="datauser.email_doc"
                                         maxlength="30" isdisabled="{{$isdisabled}}"
 
                         ></x-boxtextinput>
@@ -108,7 +158,7 @@
 
                     <div class="relative sm:col-span-2 w-72">
                         <x-boxtextinput label="Teléfono" idbox="docphone"
-                                        wireid="datadoctor.phone"
+                                        wireid="datauser.phone_doc"
                                         maxlength="13" isdisabled="{{$isdisabled}}"
                                         x-data="" x-mask="9999999999999"
 
@@ -116,7 +166,7 @@
                     </div>
                 </div>
 
-                <div class="relative sm:col-span-2">
+                <div class="relative sm:col-span-3">
                     <x-input_select_form
                             label="Estatus" idbox="docstatus"
                             wireid="datadoctor.state_id"
@@ -129,15 +179,7 @@
 
                     </x-input_select_form>
                 </div>
-                <div class="relative sm:col-span-1 ">
-                    <label class="custom-checkbox mt-4">
-                        <x-input_check_form label="Iterno" idbox="docinterno"
-                                            wireid="datadoctor.interno_doc"
-                                            isdisabled="{{$isdisabled}}">
 
-                        </x-input_check_form>
-                    </label>
-                </div>
             </div>
             <div class="mt-4 i footer flex justify-end">
                 <button

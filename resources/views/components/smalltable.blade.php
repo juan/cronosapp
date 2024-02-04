@@ -29,7 +29,7 @@
                     <th
                             @if($sortby)
                                 @if(isset($sortby[$loop->index]))
-                                    wire:click="orderColum('{{$sortby[$loop->index]}}');" ;
+                                    wire:click="orderColum('{{$sortby[$loop->index]}}','{{$sortby[$loop->index]}}')" ;
                             wire:target="orderColum"
                             x-on:click="$wire.set('apuntador','{{$loop->index}}')"
                             @php

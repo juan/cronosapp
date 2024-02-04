@@ -137,7 +137,7 @@ class RegPaciente extends Component
 
     public function loadTableInsurances($patientObj)
     {
-
+        $arrayPateintInfo = [];
         foreach ($patientObj->insurance_patient as $datainsuran) {
 
             $arrayPateintInfo[] = [

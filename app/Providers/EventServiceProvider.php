@@ -3,8 +3,10 @@
 namespace App\Providers;
 
 use App\Events\Patient\NewEmailPatient;
+use App\Events\Registro\NewUserMail;
 use App\Listeners\LogActivity;
 use App\Listeners\Patient\SendEmailNewPatient;
+use App\Listeners\Registro\SendNewUserEmail;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Events\Logout;
 use Illuminate\Auth\Events\Registered;
@@ -32,6 +34,9 @@ class EventServiceProvider extends ServiceProvider
             ],
             NewEmailPatient::class => [
                 SendEmailNewPatient::class,
+            ],
+            NewUserMail::class => [
+                SendNewUserEmail::class,
             ],
         ];
 

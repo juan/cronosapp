@@ -59,4 +59,10 @@ class UserConfig
             ['menu_option' => serialize($strinarraymenu)]);
 
     }
+
+    public function userRoleCreate($userObject): void
+    {
+        $role = $this->findRole($userObject->role_id);
+        $role->users()->attach($userObject);
+    }
 }

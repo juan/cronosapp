@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use App\Classes\Registro\Prestador\InsuranceClas;
-use App\Classes\Registro\Principal\PacienteRecord;
+use App\Classes\Registro\Principal\UserRecord;
+use App\Classes\Registro\Principal\UserValidation;
 use App\Classes\Utilidad\UserConfig;
 use App\Classes\Utilidad\UserConfigValidation;
 use Illuminate\Database\Eloquent\Model;
@@ -16,15 +16,16 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    private PacienteRecord $pacienteRecord;
-
-    private InsuranceClas $insuraclas;
-
     public function register()
     {
-
+        /*userconfig: using to configure roles,menus, query action to a user*/
         $this->app->singleton('userconfig', function () {
             return new UserConfig(new UserConfigValidation());
+        });
+
+        /*userdata: using to create, update, show, delete a user*/
+        $this->app->singleton('userdata', function () {
+            return new UserRecord(new UserValidation());
         });
 
     }

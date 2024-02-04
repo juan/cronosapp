@@ -2,7 +2,6 @@
 
 namespace App\Http\Livewire\Registro;
 
-use App\Classes\Registro\Operativo\InsurancePlanRecord;
 use App\Classes\Registro\Operativo\InsuranceRecord;
 use App\Models\Insurance;
 use App\Models\InsuranceType;
@@ -40,8 +39,6 @@ class Obrasocial extends Component
 
     private InsuranceRecord $insuranceRecord;
 
-    private InsurancePlanRecord $insurancePlanRecord;
-
     public function updatingSearch()
     {
         $this->resetPage();
@@ -73,6 +70,7 @@ class Obrasocial extends Component
 
     public function loadforEdit(Insurance $insurance)
     {
+
         $this->obrasocialmodel = $insurance;
         $this->obrasocial = $insurance->toArray();
         $this->tipoprestador = $insurance->insurance_type->name_type;

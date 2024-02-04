@@ -1,12 +1,12 @@
 <x-mail::message>
-# Introduction
+# Bienvenido.
 
-The body of your message.
+Para el uso del sistema debera resetear la contraseña.
 
 <x-mail::button :url="''">
-Button Text
+Resetear contraseña
 </x-mail::button>
 
-Thanks,<br>
+Gracias,<br>
 {{ config('app.name') }}
 </x-mail::message>

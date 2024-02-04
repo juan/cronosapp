@@ -8,7 +8,7 @@
         <ul>
             <li><a href="#no-link">Login</a></li>
             <li class="divider la la-arrow-right"></li>
-            <li>Dashboard</li>
+            <li>Dashboards</li>
         </ul>
     </section>
 
